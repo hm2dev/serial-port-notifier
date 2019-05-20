@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Serial Port Monitor"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Helm PCB"
-#define MyAppURL "http://www.helmpcb.com"
+#define MyAppURL "https://www.helmpcb.com"
 #define MyAppExeName "Serial Port Monitor.exe"
 
 [Setup]
@@ -21,15 +21,16 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-OutputBaseFilename=setup
+OutputBaseFilename={#MyAppName} v{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
+CloseApplications=force
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "D:\Documents\Visual Studio 2015\Projects\Serial Port Monitor\Serial Port Monitor\bin\Release\Serial Port Monitor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\Release\Serial Port Monitor.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

@@ -1,5 +1,5 @@
-﻿' Copyright(c) 2016 Amr Bekhit
-' http://helmpcb.com/software/serial-port-monitor
+﻿' Copyright(c) 2019 Amr Bekhit
+' https://helmpcb.com/software/serial-port-monitor
 '
 ' Permission Is hereby granted, free Of charge, to any person obtaining a copy of this 'software And associated documentation files (the "Software"), 
 ' to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -18,7 +18,12 @@ Module Main
     Dim WithEvents TrayIcon As NotifyIcon
     Dim RightClickMenu As ContextMenuStrip
 
+    Dim LauncherXMLSerializer As New Xml.Serialization.XmlSerializer(GetType(List(Of Launcher)))
+    Dim ProgramLaunchers As New List(Of Launcher)
+
     Public Sub Main()
+        Application.EnableVisualStyles()
+
         'Create the SerialMonitor timer
         SerialMonitor = New Timer
         With SerialMonitor
@@ -37,6 +42,15 @@ Module Main
             .Visible = True
             .Text = "Serial Port Monitor"
         End With
+
+        'Load the launchers
+        If My.Settings.Launchers <> "" Then
+            Try
+                ProgramLaunchers = LauncherXMLSerializer.Deserialize(New IO.StringReader(My.Settings.Launchers))
+            Catch ex As Exception
+                MessageBox.Show("Failed to load program launchers, error parsing settings: " + ex.ToString, "Settings", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End Try
+        End If
 
         SerialPorts = New List(Of String)(My.Computer.Ports.SerialPortNames)
         BuildMenu()
@@ -103,16 +117,43 @@ Module Main
             'Now add the serial ports in reverse order, with the newest ones first.
             If SerialPorts.Count > 0 Then
                 For i As Integer = SerialPorts.Count - 1 To 0 Step -1
-                    .Add(SerialPorts(i))
+                    Dim port = New ToolStripMenuItem(SerialPorts(i))
+                    .Add(port)
+                    'Now add the launchers
+                    If ProgramLaunchers.Count > 0 Then
+                        For Each l In ProgramLaunchers
+                            Dim portName As String = SerialPorts(i)
+                            port.DropDownItems.Add(l.Label, Nothing, New EventHandler(Sub()
+                                                                                          l.Launch(portName)
+                                                                                      End Sub))
+                        Next
+                    Else
+                        port.DropDownItems.Add("No launchers")
+                    End If
                 Next
             Else
                 .Add("None")
             End If
             .Add("-")
+            .Add("Settings", Nothing, New EventHandler(AddressOf SettingsMenu_Click))
             .Add("About", Nothing, New EventHandler(AddressOf AboutMenu_Click))
             .Add("Exit", Nothing, New EventHandler(AddressOf ExitMenu_Click))
         End With
 
+    End Sub
+
+    Private Sub SettingsMenu_Click(sender As Object, e As EventArgs)
+        Dim Settings As New SettingsForm
+        Settings.Launchers = CopyLauncherList(ProgramLaunchers)
+        If Settings.ShowDialog() = DialogResult.OK Then
+            ProgramLaunchers = Settings.Launchers
+            Dim StringWriter As New IO.StringWriter()
+            LauncherXMLSerializer.Serialize(StringWriter, ProgramLaunchers)
+            My.Settings.Launchers = StringWriter.ToString
+            My.Settings.Save()
+            BuildMenu()
+        End If
+        Settings.Dispose()
     End Sub
 
     Private Sub AboutMenu_Click(sender As Object, e As EventArgs)
@@ -122,4 +163,11 @@ Module Main
     Private Sub ExitMenu_Click(sender As Object, e As EventArgs)
         End
     End Sub
+
+    Private Function CopyLauncherList(list As List(Of Launcher)) As List(Of Launcher)
+        Dim outputStream As New IO.StringWriter
+        LauncherXMLSerializer.Serialize(outputStream, list)
+        Dim inputStream As New IO.StringReader(outputStream.ToString)
+        Return LauncherXMLSerializer.Deserialize(inputStream)
+    End Function
 End Module

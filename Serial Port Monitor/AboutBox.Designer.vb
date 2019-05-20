@@ -168,7 +168,7 @@ Partial Class AboutBox
         Me.URLLabel.Size = New System.Drawing.Size(277, 25)
         Me.URLLabel.TabIndex = 1
         Me.URLLabel.TabStop = True
-        Me.URLLabel.Text = "http://www.helmpcb.com/software/serial-port-monitor"
+        Me.URLLabel.Text = "https://www.helmpcb.com/software/serial-port-monitor"
         Me.URLLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'AboutBox
