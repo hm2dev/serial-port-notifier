@@ -143,17 +143,17 @@ Module Main
     End Sub
 
     Private Sub SettingsMenu_Click(sender As Object, e As EventArgs)
-        Dim Settings As New SettingsForm
-        Settings.Launchers = CopyLauncherList(ProgramLaunchers)
-        If Settings.ShowDialog() = DialogResult.OK Then
-            ProgramLaunchers = Settings.Launchers
-            Dim StringWriter As New IO.StringWriter()
-            LauncherXMLSerializer.Serialize(StringWriter, ProgramLaunchers)
-            My.Settings.Launchers = StringWriter.ToString
-            My.Settings.Save()
-            BuildMenu()
+        If Not SettingsForm.Visible Then
+            SettingsForm.Launchers = CopyLauncherList(ProgramLaunchers)
+            If SettingsForm.ShowDialog() = DialogResult.OK Then
+                ProgramLaunchers = SettingsForm.Launchers
+                Dim StringWriter As New IO.StringWriter()
+                LauncherXMLSerializer.Serialize(StringWriter, ProgramLaunchers)
+                My.Settings.Launchers = StringWriter.ToString
+                My.Settings.Save()
+                BuildMenu()
+            End If
         End If
-        Settings.Dispose()
     End Sub
 
     Private Sub AboutMenu_Click(sender As Object, e As EventArgs)

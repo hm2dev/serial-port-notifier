@@ -170,7 +170,7 @@ Partial Class SettingsForm
         Me.MinimizeBox = False
         Me.Name = "SettingsForm"
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Settings"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)

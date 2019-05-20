@@ -184,7 +184,7 @@ Partial Class AboutBox
         Me.Name = "AboutBox"
         Me.Padding = New System.Windows.Forms.Padding(9)
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "AboutBox"
         Me.TableLayoutPanel.ResumeLayout(False)
         Me.TableLayoutPanel.PerformLayout()

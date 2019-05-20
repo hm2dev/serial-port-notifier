@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Serial Port Monitor"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "Helm PCB"
 #define MyAppURL "https://www.helmpcb.com"
 #define MyAppExeName "Serial Port Monitor.exe"
@@ -30,7 +30,7 @@ CloseApplications=force
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "bin\Release\Serial Port Monitor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\x86\Release\Serial Port Monitor.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
