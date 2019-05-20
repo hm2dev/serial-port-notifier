@@ -74,6 +74,23 @@ Public Class SettingsForm
         End If
     End Sub
 
+    Private Sub btnDuplicateLauncher_Click(sender As Object, e As EventArgs) Handles btnDuplicateLauncher.Click
+        Dim newLauncher = CopyLauncher(lstLaunchers.SelectedItem)
+        Dim newIndex = lstLaunchers.SelectedIndex + 1
+        Launchers.Insert(newIndex, newLauncher)
+        PopulateLauncherList()
+        lstLaunchers.SelectedIndex = newIndex
+    End Sub
+
+    Dim LauncherXMLSerializer As New Xml.Serialization.XmlSerializer(GetType(Launcher))
+
+    Private Function CopyLauncher(l As Launcher) As Launcher
+        Dim outputStream As New IO.StringWriter
+        LauncherXMLSerializer.Serialize(outputStream, l)
+        Dim inputStream As New IO.StringReader(outputStream.ToString)
+        Return LauncherXMLSerializer.Deserialize(inputStream)
+    End Function
+
     Sub SwapItems(Of T)(l As List(Of T), index1 As Integer, index2 As Integer)
         Dim temp As T = l(index1)
         l(index1) = l(index2)
@@ -110,6 +127,7 @@ Public Class SettingsForm
 
         btnEditLauncher.Enabled = Enable
         btnDeleteLauncher.Enabled = Enable
+        btnDuplicateLauncher.Enabled = Enable
         btnMoveUp.Enabled = Enable
         btnMoveDown.Enabled = Enable
     End Sub
@@ -117,6 +135,12 @@ Public Class SettingsForm
     Private Sub lstLaunchers_DoubleClick(sender As Object, e As EventArgs) Handles lstLaunchers.DoubleClick
         If lstLaunchers.SelectedIndex >= 0 Then
             btnEditLauncher_Click(sender, e)
+        End If
+    End Sub
+
+    Private Sub lstLaunchers_KeyDown(sender As Object, e As KeyEventArgs) Handles lstLaunchers.KeyDown
+        If lstLaunchers.SelectedIndex >= 0 AndAlso e.KeyCode = Keys.Delete Then
+            btnDeleteLauncher_Click(sender, e)
         End If
     End Sub
 End Class

@@ -26,6 +26,7 @@ Partial Class SettingsForm
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.btnDuplicateLauncher = New System.Windows.Forms.Button()
         Me.btnDeleteLauncher = New System.Windows.Forms.Button()
         Me.btnMoveDown = New System.Windows.Forms.Button()
         Me.btnMoveUp = New System.Windows.Forms.Button()
@@ -44,7 +45,7 @@ Partial Class SettingsForm
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(283, 248)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(363, 248)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -74,6 +75,7 @@ Partial Class SettingsForm
         '
         Me.GroupBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Controls.Add(Me.btnDuplicateLauncher)
         Me.GroupBox2.Controls.Add(Me.btnDeleteLauncher)
         Me.GroupBox2.Controls.Add(Me.btnMoveDown)
         Me.GroupBox2.Controls.Add(Me.btnMoveUp)
@@ -82,10 +84,20 @@ Partial Class SettingsForm
         Me.GroupBox2.Controls.Add(Me.lstLaunchers)
         Me.GroupBox2.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(417, 230)
+        Me.GroupBox2.Size = New System.Drawing.Size(497, 230)
         Me.GroupBox2.TabIndex = 2
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Launchers"
+        '
+        'btnDuplicateLauncher
+        '
+        Me.btnDuplicateLauncher.Enabled = False
+        Me.btnDuplicateLauncher.Location = New System.Drawing.Point(252, 198)
+        Me.btnDuplicateLauncher.Name = "btnDuplicateLauncher"
+        Me.btnDuplicateLauncher.Size = New System.Drawing.Size(75, 23)
+        Me.btnDuplicateLauncher.TabIndex = 12
+        Me.btnDuplicateLauncher.Text = "Duplicate"
+        Me.btnDuplicateLauncher.UseVisualStyleBackColor = True
         '
         'btnDeleteLauncher
         '
@@ -93,27 +105,27 @@ Partial Class SettingsForm
         Me.btnDeleteLauncher.Location = New System.Drawing.Point(171, 198)
         Me.btnDeleteLauncher.Name = "btnDeleteLauncher"
         Me.btnDeleteLauncher.Size = New System.Drawing.Size(75, 23)
-        Me.btnDeleteLauncher.TabIndex = 13
+        Me.btnDeleteLauncher.TabIndex = 11
         Me.btnDeleteLauncher.Text = "Delete..."
         Me.btnDeleteLauncher.UseVisualStyleBackColor = True
         '
         'btnMoveDown
         '
         Me.btnMoveDown.Enabled = False
-        Me.btnMoveDown.Location = New System.Drawing.Point(333, 198)
+        Me.btnMoveDown.Location = New System.Drawing.Point(414, 198)
         Me.btnMoveDown.Name = "btnMoveDown"
         Me.btnMoveDown.Size = New System.Drawing.Size(75, 23)
-        Me.btnMoveDown.TabIndex = 12
+        Me.btnMoveDown.TabIndex = 14
         Me.btnMoveDown.Text = "Move Down"
         Me.btnMoveDown.UseVisualStyleBackColor = True
         '
         'btnMoveUp
         '
         Me.btnMoveUp.Enabled = False
-        Me.btnMoveUp.Location = New System.Drawing.Point(252, 198)
+        Me.btnMoveUp.Location = New System.Drawing.Point(333, 198)
         Me.btnMoveUp.Name = "btnMoveUp"
         Me.btnMoveUp.Size = New System.Drawing.Size(75, 23)
-        Me.btnMoveUp.TabIndex = 11
+        Me.btnMoveUp.TabIndex = 13
         Me.btnMoveUp.Text = "Move Up"
         Me.btnMoveUp.UseVisualStyleBackColor = True
         '
@@ -141,7 +153,7 @@ Partial Class SettingsForm
         Me.lstLaunchers.FormattingEnabled = True
         Me.lstLaunchers.Location = New System.Drawing.Point(9, 19)
         Me.lstLaunchers.Name = "lstLaunchers"
-        Me.lstLaunchers.Size = New System.Drawing.Size(399, 173)
+        Me.lstLaunchers.Size = New System.Drawing.Size(480, 173)
         Me.lstLaunchers.TabIndex = 8
         '
         'SettingsForm
@@ -150,7 +162,7 @@ Partial Class SettingsForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(441, 289)
+        Me.ClientSize = New System.Drawing.Size(521, 289)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -175,4 +187,5 @@ Partial Class SettingsForm
     Friend WithEvents btnMoveUp As Button
     Friend WithEvents btnEditLauncher As Button
     Friend WithEvents btnNewLauncher As Button
+    Friend WithEvents btnDuplicateLauncher As Button
 End Class
