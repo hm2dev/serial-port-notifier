@@ -24,6 +24,13 @@ Module Main
     Public Sub Main()
         Application.EnableVisualStyles()
 
+        'Check if we need to upgrade the settings
+        If My.Settings.UpgradeRequired Then
+            My.Settings.Upgrade()
+            My.Settings.UpgradeRequired = False
+            My.Settings.Save()
+        End If
+
         'Create the SerialMonitor timer
         SerialMonitor = New Timer
         With SerialMonitor

@@ -12,12 +12,15 @@
 ' WHETHER In AN ACTION Of CONTRACT, TORT Or OTHERWISE, ARISING FROM, OUT Of Or In CONNECTION With THE SOFTWARE Or THE USE Or OTHER DEALINGS In THE SOFTWARE.
 
 Imports System.IO
+Imports System.Text.RegularExpressions
 
 <Serializable>
 Public Class Launcher
     Public Label As String
     Public Executable As String
     Public CommandLine As String
+
+    Dim PortNumberRegex As New Regex("\w*?(\d+)")
 
     Sub New()
 
@@ -42,8 +45,14 @@ Public Class Launcher
     End Function
 
     Public Function GetPortNumber(serialPort As String) As Integer
-        ' Get rid of the first 3 letters (COM)
-        Return serialPort.Substring(3)
+        ' Extract any numbers at the end of the serial port name.
+        Dim match = PortNumberRegex.Match(serialPort)
+        ' If the code fails to extract the port number, then assume 0
+        Dim portNumber As Integer = 0
+        If match.Success Then
+            portNumber = match.Groups(1).ToString
+        End If
+        Return portNumber
     End Function
 
     Public Overrides Function ToString() As String
