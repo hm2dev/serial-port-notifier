@@ -7,6 +7,9 @@ Serial Port Notifier (formerly Serial Port Monitor) is a utility that sits in yo
 
 Changelog:
 
+v1.2.1				(2019/07/13)
+- Fixed a bug where the serial port name was not being displayed in the custom port name dialog.
+
 v1.2.0				(2019/07/13)
 - Added the ability to add custom labels to serial ports (https://sourceforge.net/p/serial-port-monitor/tickets/3/).
 - Added the option to enable or disable the notification popups (https://sourceforge.net/p/serial-port-monitor/tickets/2/).

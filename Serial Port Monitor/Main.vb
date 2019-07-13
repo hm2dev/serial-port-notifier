@@ -187,6 +187,7 @@ Module Main
                                                                                       End Try
 
                                                                                       Using CustomLabelDialog As New CustomPortNameDialog
+                                                                                          CustomLabelDialog.lblInstructions.Text = String.Format(CustomLabelDialog.lblInstructions.Text, portName)
                                                                                           CustomLabelDialog.txtCustomLabel.Text = label
                                                                                           If CustomLabelDialog.ShowDialog = DialogResult.OK Then
                                                                                               label = CustomLabelDialog.txtCustomLabel.Text
