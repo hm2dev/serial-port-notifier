@@ -21,6 +21,9 @@ Module Main
     Dim LauncherXMLSerializer As New Xml.Serialization.XmlSerializer(GetType(List(Of Launcher)))
     Dim ProgramLaunchers As New List(Of Launcher)
 
+    Dim CustomPortNamesXMLSerializer As New Xml.Serialization.XmlSerializer(GetType(List(Of CustomPortName)))
+    Dim CustomPortNames As New Dictionary(Of String, String)
+
     Public Sub Main()
         Application.EnableVisualStyles()
 
@@ -47,7 +50,7 @@ Module Main
             .ContextMenuStrip = RightClickMenu
             .Icon = My.Resources.Logo
             .Visible = True
-            .Text = "Serial Port Monitor"
+            .Text = My.Application.Info.ProductName
         End With
 
         'Load the launchers
@@ -59,6 +62,18 @@ Module Main
             End Try
         End If
 
+        'Load the custom port names
+        If My.Settings.CustomPortNames <> "" Then
+            Try
+                Dim entries As List(Of CustomPortName) = CustomPortNamesXMLSerializer.Deserialize(New IO.StringReader(My.Settings.CustomPortNames))
+                For Each entry In entries
+                    CustomPortNames.Add(entry.Port, entry.CustomName)
+                Next
+            Catch ex As Exception
+                MessageBox.Show("Failed to load port names, error parsing settings: " + ex.ToString, "Settings", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End Try
+        End If
+
         SerialPorts = New List(Of String)(My.Computer.Ports.SerialPortNames)
         BuildMenu()
 
@@ -66,6 +81,28 @@ Module Main
 
         TrayIcon.Visible = False
     End Sub
+
+    Function GetCustomPortNames(portName As String) As String
+        Dim customName As String
+
+        Try
+            customName = String.Format("{0} ({1})", CustomPortNames(portName), portName)
+        Catch ex As KeyNotFoundException
+            customName = portName
+        End Try
+
+        Return customName
+    End Function
+
+    Function GetCustomPortNames(portNameList As List(Of String)) As List(Of String)
+        Dim customPortNameList As New List(Of String)
+
+        For Each name In portNameList
+            customPortNameList.Add(GetCustomPortNames(name))
+        Next
+
+        Return customPortNameList
+    End Function
 
     Private Sub SerialMonitor_Tick(sender As Object, e As EventArgs) Handles SerialMonitor.Tick
         'Get a list of the ports currently connected
@@ -79,26 +116,28 @@ Module Main
         Dim RemovedPorts = (From port In SerialPorts
                             Where Not CurrentPorts.Contains(port)).ToList
 
-        'Generate the notification bubble listing the changes
-        Dim BalloonText As String = ""
+        If My.Settings.ShowNotification Then
+            'Generate the notification bubble listing the changes
+            Dim BalloonText As String = ""
 
-        If NewPorts.Count > 0 Then
-            BalloonText = String.Format("New Serial Ports: {0}", String.Join(",", NewPorts))
-        End If
-
-        If RemovedPorts.Count > 0 Then
-            'Add a new line if there's already some balloon text from a port being added:
-            If BalloonText.Length > 0 Then
-                BalloonText &= vbNewLine
+            If NewPorts.Count > 0 Then
+                BalloonText = String.Format("New Serial Ports:" + Environment.NewLine + "{0}", String.Join(Environment.NewLine, GetCustomPortNames(NewPorts)))
             End If
 
-            BalloonText &= String.Format("Serial Ports Removed: {0}", String.Join(",", RemovedPorts))
-        End If
+            If RemovedPorts.Count > 0 Then
+                'Add a new line if there's already some balloon text from a port being added:
+                If BalloonText.Length > 0 Then
+                    BalloonText &= Environment.NewLine
+                End If
 
-        'See if we need to show the notification
-        If BalloonText.Length > 0 Then
-            TrayIcon.BalloonTipText = BalloonText
-            TrayIcon.ShowBalloonTip(3000)
+                BalloonText &= String.Format("Serial Ports Removed:" + Environment.NewLine + "{0}", String.Join(Environment.NewLine, GetCustomPortNames(RemovedPorts)))
+            End If
+
+            'See if we need to show the notification
+            If BalloonText.Length > 0 Then
+                TrayIcon.BalloonTipText = BalloonText
+                TrayIcon.ShowBalloonTip(3000)
+            End If
         End If
 
         'Update the serial ports list - make sure to maintain the order of the ports
@@ -124,12 +163,12 @@ Module Main
             'Now add the serial ports in reverse order, with the newest ones first.
             If SerialPorts.Count > 0 Then
                 For i As Integer = SerialPorts.Count - 1 To 0 Step -1
-                    Dim port = New ToolStripMenuItem(SerialPorts(i))
+                    Dim portName As String = SerialPorts(i)
+                    Dim port = New ToolStripMenuItem(GetCustomPortNames(SerialPorts(i)))
                     .Add(port)
                     'Now add the launchers
                     If ProgramLaunchers.Count > 0 Then
                         For Each l In ProgramLaunchers
-                            Dim portName As String = SerialPorts(i)
                             port.DropDownItems.Add(l.Label, Nothing, New EventHandler(Sub()
                                                                                           l.Launch(portName)
                                                                                       End Sub))
@@ -137,6 +176,31 @@ Module Main
                     Else
                         port.DropDownItems.Add("No launchers")
                     End If
+                    'Add the Rename menu
+                    port.DropDownItems.Add("-")
+                    port.DropDownItems.Add("Rename...", Nothing, New EventHandler(Sub()
+                                                                                      Dim label As String
+                                                                                      Try
+                                                                                          label = CustomPortNames(portName)
+                                                                                      Catch ex As KeyNotFoundException
+                                                                                          label = ""
+                                                                                      End Try
+
+                                                                                      Using CustomLabelDialog As New CustomPortNameDialog
+                                                                                          CustomLabelDialog.txtCustomLabel.Text = label
+                                                                                          If CustomLabelDialog.ShowDialog = DialogResult.OK Then
+                                                                                              label = CustomLabelDialog.txtCustomLabel.Text
+                                                                                              If label <> String.Empty Then
+                                                                                                  CustomPortNames(portName) = label
+                                                                                              Else
+                                                                                                  'The user wants to remove the label
+                                                                                                  CustomPortNames.Remove(portName)
+                                                                                              End If
+                                                                                              SaveCustomPortNames()
+                                                                                              BuildMenu()
+                                                                                          End If
+                                                                                      End Using
+                                                                                  End Sub))
                 Next
             Else
                 .Add("None")
@@ -157,6 +221,7 @@ Module Main
                 Dim StringWriter As New IO.StringWriter()
                 LauncherXMLSerializer.Serialize(StringWriter, ProgramLaunchers)
                 My.Settings.Launchers = StringWriter.ToString
+                My.Settings.ShowNotification = SettingsForm.chkShowNotification.Checked
                 My.Settings.Save()
                 BuildMenu()
             End If
@@ -177,4 +242,11 @@ Module Main
         Dim inputStream As New IO.StringReader(outputStream.ToString)
         Return LauncherXMLSerializer.Deserialize(inputStream)
     End Function
+
+    Sub SaveCustomPortNames()
+        Dim outputStream As New IO.StringWriter
+        CustomPortNamesXMLSerializer.Serialize(outputStream, CustomPortName.FromKVList(CustomPortNames.ToList()))
+        My.Settings.CustomPortNames = outputStream.ToString
+        My.Settings.Save()
+    End Sub
 End Module

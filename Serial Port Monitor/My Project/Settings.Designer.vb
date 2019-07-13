@@ -76,6 +76,30 @@ Partial Friend NotInheritable Class Settings
             Me("UpgradeRequired") = value
         End Set
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+    Public Property CustomPortNames() As String
+        Get
+            Return CType(Me("CustomPortNames"),String)
+        End Get
+        Set
+            Me("CustomPortNames") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+    Public Property ShowNotification() As Boolean
+        Get
+            Return CType(Me("ShowNotification"),Boolean)
+        End Get
+        Set
+            Me("ShowNotification") = value
+        End Set
+    End Property
 End Class
 
 Namespace My

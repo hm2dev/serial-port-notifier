@@ -32,35 +32,38 @@ Public Class SettingsForm
 
 
     Private Sub btnNewLauncher_Click(sender As Object, e As EventArgs) Handles btnNewLauncher.Click
-        Dim Dialog = New LauncherDialog
-        Dialog.Text = "New Launcher"
-        If Dialog.ShowDialog() = DialogResult.OK Then
-            'Create a new launcher
-            Dim launcher = Dialog.Launcher
-            Launchers.Add(launcher)
+        Using Dialog As New LauncherDialog
+            Dialog.Text = "New Launcher"
+            If Dialog.ShowDialog() = DialogResult.OK Then
+                'Create a new launcher
+                Dim launcher = Dialog.Launcher
+                Launchers.Add(launcher)
 
-            PopulateLauncherList()
-        End If
-        Dialog.Dispose()
+                PopulateLauncherList()
+            End If
+        End Using
+
         lstLaunchers_SelectedIndexChanged(sender, e)
     End Sub
 
     Private Sub SettingsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         PopulateLauncherList()
+        chkShowNotification.Checked = My.Settings.ShowNotification
     End Sub
 
     Private Sub btnEditLauncher_Click(sender As Object, e As EventArgs) Handles btnEditLauncher.Click
         Dim launcher As Launcher = lstLaunchers.SelectedItem
-        Dim Dialog = New LauncherDialog
-        Dialog.Text = "Edit Launcher"
-        Dialog.SetLauncher(launcher)
-        If Dialog.ShowDialog() = DialogResult.OK Then
-            launcher = Dialog.Launcher
-            Launchers(lstLaunchers.SelectedIndex) = launcher
-        End If
+
+        Using Dialog As New LauncherDialog
+            Dialog.Text = "Edit Launcher"
+            Dialog.SetLauncher(launcher)
+            If Dialog.ShowDialog() = DialogResult.OK Then
+                launcher = Dialog.Launcher
+                Launchers(lstLaunchers.SelectedIndex) = launcher
+            End If
+        End Using
 
         PopulateLauncherList()
-        Dialog.Dispose()
         lstLaunchers_SelectedIndexChanged(sender, e)
     End Sub
 

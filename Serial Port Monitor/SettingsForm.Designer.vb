@@ -33,8 +33,11 @@ Partial Class SettingsForm
         Me.btnEditLauncher = New System.Windows.Forms.Button()
         Me.btnNewLauncher = New System.Windows.Forms.Button()
         Me.lstLaunchers = New System.Windows.Forms.ListBox()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.chkShowNotification = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -45,7 +48,7 @@ Partial Class SettingsForm
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(363, 248)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(363, 341)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -82,7 +85,7 @@ Partial Class SettingsForm
         Me.GroupBox2.Controls.Add(Me.btnEditLauncher)
         Me.GroupBox2.Controls.Add(Me.btnNewLauncher)
         Me.GroupBox2.Controls.Add(Me.lstLaunchers)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 12)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 103)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(497, 230)
         Me.GroupBox2.TabIndex = 2
@@ -156,13 +159,34 @@ Partial Class SettingsForm
         Me.lstLaunchers.Size = New System.Drawing.Size(480, 173)
         Me.lstLaunchers.TabIndex = 8
         '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.chkShowNotification)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(497, 85)
+        Me.GroupBox1.TabIndex = 3
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Application Settings"
+        '
+        'chkShowNotification
+        '
+        Me.chkShowNotification.AutoSize = True
+        Me.chkShowNotification.Location = New System.Drawing.Point(20, 36)
+        Me.chkShowNotification.Name = "chkShowNotification"
+        Me.chkShowNotification.Size = New System.Drawing.Size(191, 17)
+        Me.chkShowNotification.TabIndex = 0
+        Me.chkShowNotification.Text = "Show Notification on Port Changes"
+        Me.chkShowNotification.UseVisualStyleBackColor = True
+        '
         'SettingsForm
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(521, 289)
+        Me.ClientSize = New System.Drawing.Size(521, 382)
+        Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -174,6 +198,8 @@ Partial Class SettingsForm
         Me.Text = "Settings"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -188,4 +214,6 @@ Partial Class SettingsForm
     Friend WithEvents btnEditLauncher As Button
     Friend WithEvents btnNewLauncher As Button
     Friend WithEvents btnDuplicateLauncher As Button
+    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents chkShowNotification As CheckBox
 End Class
