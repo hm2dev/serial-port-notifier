@@ -7,6 +7,9 @@ Serial Port Notifier (formerly Serial Port Monitor) is a utility that sits in yo
 
 Changelog:
 
+v1.2.2				(2019/09/13)
+- Added validation of launcher program path to ensure that it doesn't contain invalid characters. This ensures that a mistake in the launcher path doesn't prevent Serial Port Notifier from running.
+
 v1.2.1				(2019/07/13)
 - Fixed a bug where the serial port name was not being displayed in the custom port name dialog.
 

@@ -12,7 +12,6 @@
 ' WHETHER In AN ACTION Of CONTRACT, TORT Or OTHERWISE, ARISING FROM, OUT Of Or In CONNECTION With THE SOFTWARE Or THE USE Or OTHER DEALINGS In THE SOFTWARE.
 
 Imports System.IO
-
 Public Class LauncherDialog
 
     Public Launcher As Launcher
@@ -27,6 +26,14 @@ Public Class LauncherDialog
             MessageBox.Show("Please enter a program to launch", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
+
+        'Validate the program path
+        Try
+            IO.Path.GetFileName(txtLauncherProgram.Text.Trim)
+        Catch ex As Exception
+            MessageBox.Show("Invalid path to program", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End Try
 
         Launcher = New Launcher(txtLauncherLabel.Text, txtLauncherProgram.Text, txtLauncherCommandLine.Text)
         Me.DialogResult = System.Windows.Forms.DialogResult.OK

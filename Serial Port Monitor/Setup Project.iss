@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Serial Port Notifier"
-#define MyAppVersion "1.2.1"
+#define MyAppVersion "1.2.2"
 #define MyAppPublisher "HelmPCB"
 #define MyAppURL "https://www.helmpcb.com"
 #define MyAppExeName "Serial Port Monitor.exe"
